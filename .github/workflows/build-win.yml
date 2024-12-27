@@ -1,0 +1,29 @@
+name: Windows build
+
+on:
+  workflow_dispatch: # manually-triggered workflow
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prepare environment
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: gcc
+
+      - name: Build project
+        run: |
+          chmod +x ./build/build.sh
+          bash ./build/build.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifact
+          path: ./dist/*
