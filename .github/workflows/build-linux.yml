@@ -1,0 +1,28 @@
+name: Linux build
+
+on:
+  workflow_dispatch: # manually-triggered workflow
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Prepare environment
+        run: |
+          sudo apt update 
+          sudo apt install -y gcc g++
+
+      - name: Build project
+        run: |
+          chmod +x ./build/build.sh
+          bash ./build/build.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-artifact
+          path: ./dist/*
